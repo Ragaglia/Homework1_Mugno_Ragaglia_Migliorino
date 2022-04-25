@@ -326,24 +326,25 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sn
 import pandas as pd
 
+#Computing the confusion matrix
 y_pred = []
 y_true = []
 
-# iterate over test data
+#Iterate on test set
 for inputs, labels in test_loader:
   
   inputs, labels = inputs.cuda(), labels.cuda()
-  output = net(inputs) # Feed Network
+  output = net(inputs) 
   output = (torch.max(torch.exp(output), 1)[1]).data.cpu().numpy()
-  y_pred.extend(output) # Save Prediction
+  y_pred.extend(output)
   labels = labels.data.cpu().numpy()
-  y_true.extend(labels) # Save Truth
+  y_true.extend(labels) 
 
-# constant for classes
+#Classes
 dest_dir = "./Fruit-Images-Dataset-master/Training"
 classes = os.listdir(dest_dir)
 
-# Build confusion matrix
+#Build confusion matrix
 cm = confusion_matrix(y_true, y_pred)
 cmn = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
 
